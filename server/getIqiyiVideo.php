@@ -1,6 +1,7 @@
 <?php
 require "core/base.class.php";
 require "core/iqiyi.class.php";
+
 $vid = $_GET['vid'];
 $tvid = $_GET['tvid'];
 $bid = intval($_GET['bid']);
