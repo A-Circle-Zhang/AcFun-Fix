@@ -20,7 +20,7 @@
 		return
 	}
  	$.info("AcFun Fix: 欢迎使用 AcFun Fix 2015.02.19 E-mail:cctvyay@163.com");
- 	var b = $("a.active.primary").attr("data-from");
+ 	var b = $("a.active.primary").data("from");
  	window._getPlayer = function() {
  		return document.getElementById("ACFlashPlayer-re") ? document.getElementById("ACFlashPlayer-re") : (document.getElementById("not-ACFlashPlayer-re") ? document.getElementById("not-ACFlashPlayer-re") : document.getElementById("area-player"));
  	};
@@ -55,11 +55,24 @@
  		"56": "56网",
  		"pptv": "PPTV"
  	};
+	if(typeof(sourceList[b]) == "undefined"){
+		$.ajax({
+			url: "http://www.acfun.tv/video/getVideo.aspx?id="+$("a.active.primary").data("vid"),
+			async: false,
+			success:function(data){
+				$("a.active.primary").data("from",data.sourceType);
+				$("a.active.primary").data("sid",data.sourceId);
+				b = data.sourceType;
+			}
+		});
+	};
  	if (b != "letv") {
- 		c("http://static.skydust.net/private/acfun/AcPlayer201412121_D.swf", "oldcs=1&host=http://www.talkshowcn.com&vid=" + $("a.active.primary").attr("data-vid") + "|" + b + "|" + $("a.active.primary").attr("data-sid"));
- 		$("#video-download").append('<a class="btn primary" onclick="$(_getPlayer()).prop(\'outerHTML\',$(_getPlayer()).prop(\'outerHTML\').replace(/acfun.tv/,\'talkshowcn.com\'))" style="float:none;color:#fff;margin-left:8px;" target="_blank"><i class="icon icon-refresh"></i>若解析失败点这儿刷新几次</a>')
- 	}
- 	$.info("视频源类型：" + sourceList[b]);
+ 		c("http://static.skydust.net/private/acfun/AcPlayer201412121_D.swf", "oldcs=1&host=http://www.talkshowcn.com&vid=" + $("a.active.primary").data("vid") + "|" + b + "|" + $("a.active.primary").data("sid"));
+ 		$("#video-download").append('<a class="btn primary" onclick="$(_getPlayer()).prop(\'outerHTML\',$(_getPlayer()).prop(\'outerHTML\').replace(/acfun.tv/,\'talkshowcn.com\'))" style="float:none;color:#fff;margin-left:8px;" target="_blank"><i class="icon icon-refresh"></i>若解析失败点这儿刷新几次</a>');
+		$.info("视频源类型：" + sourceList[b]);
+ 	}else{
+		$.info("乐视云源本程序不会进行任何处理，出现问题是 AcFun 的问题，请联系客服。");
+	}
  	$.info("success::朱军，腾讯源、爱奇艺源已恢复 1080p 画质！顺便安利一下我的新的和硕鼠差不多比硕鼠强大的解析网站: www.flvsp.com ！");
  	window.setCookie = function(d, f) {
  		var e = 365;
@@ -82,8 +95,4 @@
  			$("#hideroom").click()
  		}
  	};
- 	if (a("fuckqqtips") != 1 && b == 'qq') {
- 		setCookie("fuckqqtips", 1);
- 		alert("因为很重要，所以弹窗提示一次：腾讯源视频解析失败请多点播放器上方的刷新按钮刷新几次试试！如果其他源都没问题，腾讯源视频刷新几次还是放不了，请在聊天室反馈；如果所有视频源都不能加载，那是你网络问题。无视、直接跳过这个弹窗而引起的问题，我不但不会帮你，还会骂你。");
- 	}
  })();
